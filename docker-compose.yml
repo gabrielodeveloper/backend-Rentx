@@ -1,5 +1,18 @@
 version: "3.9" 
 services:
+  database_ignite:
+    image: postgres
+    container_name: database_ignite
+    restart:  always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=ignite
+      - POSTGRES_DB=rentx
+    volumes:
+      - pgdata:/data/postgres
+    network_mode: host
   app:
     build: .
     container_name: rentx
@@ -7,10 +20,7 @@ services:
       - "3333:3333"
     volumes:
       - .:/usr/app
-#       - logvolume01:/var/log
-#     depends_on:
-#       - redis
-#   redis:
-#     image: redis
-# volumes:
-#   logvolume01: {}
+    network_mode: host
+volumes: 
+  pgdata: 
+    driver: local
